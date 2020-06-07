@@ -9,16 +9,35 @@ class QueueWithMax {
  public:
   void Enqueue(int x) {
     // TODO - you fill in here.
+    data.emplace_back(x);
+    cnt[x] += 1;
     return;
   }
   int Dequeue() {
     // TODO - you fill in here.
-    return 0;
+    int v = data.front();
+    data.pop_front();
+    --cnt[v];
+    if (cnt[v] == 0) {
+        cnt.erase(v);
+    }
+    return v;
   }
   int Max() const {
     // TODO - you fill in here.
-    return 0;
+    int max_val = data.front();
+    for (auto iter = cnt.cbegin(); iter != cnt.cend(); ++iter) {
+        if (max_val < iter->first) {
+            max_val = iter->first;
+        }
+    }
+    return max_val;
   }
+
+private:
+    std::deque<int> data;
+    std::map<int, int> cnt;
+
 };
 struct QueueOp {
   enum class Operation { kConstruct, kDequeue, kEnqueue, kMax } op;

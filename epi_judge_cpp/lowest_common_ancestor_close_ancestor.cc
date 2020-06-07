@@ -10,6 +10,31 @@ using std::unique_ptr;
 BinaryTreeNode<int>* Lca(const unique_ptr<BinaryTreeNode<int>>& node0,
                          const unique_ptr<BinaryTreeNode<int>>& node1) {
   // TODO - you fill in here.
+  std::unordered_set<BinaryTreeNode<int>*> node_set;
+  BinaryTreeNode<int> *p0 = node0.get(), *p1 = node1.get();
+  while (p0 && p1) {
+      auto iter = node_set.find(p0);
+      if (iter != node_set.end()) {
+          return *iter;
+      }
+      node_set.insert(p0);
+      p0 = p0->parent;
+
+      iter = node_set.find(p1);
+      if (iter != node_set.end()) {
+          return *iter;
+      }
+      node_set.insert(p1);
+      p1 = p1->parent;
+  }
+  auto *residual = p0 == nullptr ? p1 : p0;
+  while (residual != nullptr) {
+      auto iter = node_set.find(residual);
+      if (iter != node_set.end()) {
+          return *iter;
+      }
+      residual = residual->parent;
+  }
   return nullptr;
 }
 int LcaWrapper(TimedExecutor& executor,

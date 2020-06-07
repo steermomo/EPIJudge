@@ -9,9 +9,21 @@
 using std::unique_ptr;
 using std::vector;
 
+unique_ptr<BstNode<int>> BuildMinHeightBSTFromSortedArrayHelper(const vector<int>& A, int left, int right){
+    if (left >= right) {
+        return nullptr;
+    }
+    int middle_idx = left + (right - left) / 2;
+    // 递归构建结点
+    return std::make_unique<BstNode<int>>(BstNode<int>{A[middle_idx],
+                                                       BuildMinHeightBSTFromSortedArrayHelper(A, left, middle_idx),
+                                                       BuildMinHeightBSTFromSortedArrayHelper(A, middle_idx+1, right)});
+}
+
 unique_ptr<BstNode<int>> BuildMinHeightBSTFromSortedArray(
     const vector<int>& A) {
   // TODO - you fill in here.
+  return BuildMinHeightBSTFromSortedArrayHelper(A, 0, A.size());
   return nullptr;
 }
 int BuildMinHeightBSTFromSortedArrayWrapper(TimedExecutor& executor,

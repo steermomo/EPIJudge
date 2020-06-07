@@ -14,9 +14,62 @@ struct Interval {
   Endpoint left, right;
 };
 
+struct Point {
+    bool operator<(const Point& p) const {
+//        return val != p.val ? val < p.val : (is_left && !p.is_left);
+        if (val != p.val) {
+            return val < p.val;
+        }
+        // 元素相等 两个都是开区间
+        if (!is_closed && !p.is_closed) {
+            // 一前一后 将right 放在left前
+            return !is_left && p.is_left;
+        }
+
+        // 元素相等 一开一闭 都是right 开区间放前
+        if (!is_left && !p.is_left) {
+            return !is_closed && p.is_closed;
+        }
+        // 元素相等 一开一闭 都是left 闭区间放前
+        if (is_left && p.is_left) {
+            return is_closed && !p.is_closed;
+        }
+        // 元素相等 一开一闭 left放在right前
+        return is_left && !p.is_left;
+    }
+    int val;
+    bool is_left;
+    bool is_closed;
+};
 vector<Interval> UnionOfIntervals(vector<Interval> intervals) {
   // TODO - you fill in here.
-  return {};
+  vector<Point> P;
+  for (auto &each : intervals) {
+      P.push_back({each.left.val, true, each.left.is_closed});
+      P.push_back({each.right.val, false, each.right.is_closed});
+  }
+  std::sort(P.begin(), P.end());
+  vector<Interval> ret;
+
+  bool is_new_intervals = true, left_closed = false;
+  int left_idx = 0, left_cnt = 0;
+  for (auto &each : P) {
+    if (each.is_left) {
+        ++left_cnt;
+        if (is_new_intervals) {
+            left_idx = each.val;
+            left_closed = each.is_closed;
+            is_new_intervals = false;
+        }
+    } else {
+        --left_cnt;
+    }
+    if (left_cnt == 0) {
+        ret.push_back({{left_closed, left_idx},{each.is_closed, each.val}});
+        is_new_intervals = true;
+    }
+  }
+  return ret;
 }
 struct FlatInterval {
   int left_val;

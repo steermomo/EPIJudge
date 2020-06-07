@@ -8,6 +8,31 @@ using std::shared_ptr;
 
 shared_ptr<ListNode<int>> HasCycle(const shared_ptr<ListNode<int>>& head) {
   // TODO - you fill in here.
+  shared_ptr<ListNode<int>> slow = head, fast = head;
+  while (fast && fast->next) {
+      slow = slow->next;
+      fast = fast->next->next;
+      if (slow == fast) { // find cycle
+          // 计算圈长
+          int cycle_len = 0;
+          do {
+              ++cycle_len;
+              fast = fast->next;
+          }while (slow != fast);
+          // cycle 指针先前进cycle len
+          auto cycle_advance_iter = head;
+          while (cycle_len--) {
+              cycle_advance_iter = cycle_advance_iter->next;
+          }
+          // 两指针同时前进
+          auto iter = head;
+          while (iter != cycle_advance_iter) {
+              iter = iter->next;
+              cycle_advance_iter = cycle_advance_iter->next;
+          }
+          return iter;
+      }
+  }
   return nullptr;
 }
 void HasCycleWrapper(TimedExecutor& executor,

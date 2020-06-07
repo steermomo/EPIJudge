@@ -7,6 +7,7 @@ using std::vector;
 
 int FindNearestRepetition(const vector<string>& paragraph) {
   // TODO - you fill in here.
+
   return 0;
 }
 

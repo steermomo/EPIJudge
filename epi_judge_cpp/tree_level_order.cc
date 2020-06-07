@@ -9,7 +9,31 @@ using std::vector;
 vector<vector<int>> BinaryTreeDepthOrder(
     const unique_ptr<BinaryTreeNode<int>>& tree) {
   // TODO - you fill in here.
-  return {};
+  // 定义当前层的结点，用根节点初始化
+  std::queue<BinaryTreeNode<int>*> curr_depth_nodes({tree.get()});
+  vector<vector<int>> ret;
+
+  while (!curr_depth_nodes.empty()) {
+      // 定义下一层
+      std::queue<BinaryTreeNode<int>*> next_depth_nodes;
+      vector<int> this_level;
+      // 遍历当前层
+      while (!curr_depth_nodes.empty()) {
+          auto curr = curr_depth_nodes.front();
+          curr_depth_nodes.pop();
+          if (curr) {
+              this_level.emplace_back(curr->data);
+              // 先左后右 保证按层顺序
+              next_depth_nodes.emplace(curr->left.get());
+              next_depth_nodes.emplace(curr->right.get());
+          }
+      }
+      if (!this_level.empty()) {
+          ret.emplace_back(this_level);
+      }
+      curr_depth_nodes = next_depth_nodes;
+  }
+  return ret;
 }
 
 int main(int argc, char* argv[]) {

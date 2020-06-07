@@ -5,7 +5,25 @@ using std::vector;
 
 bool MatrixSearch(const vector<vector<int>>& A, int x) {
   // TODO - you fill in here.
-  return true;
+  if (A.empty()) {
+      return false;
+  }
+  int row = 0, max_col = A[0].size() - 1;
+  while (row < A.size()) {
+      for (int col = max_col; col >= 0; --col) {
+          if (A[row][col] == x) {
+              return true;
+          }
+          if (x > A[row][col]) {
+              break;
+          }
+          if (x < A[row][col]) {
+              max_col = col - 1;
+          }
+      }
+      ++row;
+  }
+  return false;
 }
 
 int main(int argc, char* argv[]) {

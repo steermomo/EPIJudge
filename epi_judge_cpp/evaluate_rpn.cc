@@ -4,7 +4,37 @@
 using std::string;
 int Evaluate(const string& expression) {
   // TODO - you fill in here.
-  return 0;
+  std::stack<int> intermediate_result;
+  std::stringstream ss(expression);
+  std::string token;
+  const char kDelimiter = ',';
+  while (getline(ss, token, kDelimiter)) {
+      if (token == "+" || token == "-" || token == "*" || token == "/") {
+          const int y = intermediate_result.top();
+          intermediate_result.pop();
+          const int x = intermediate_result.top();
+          intermediate_result.pop();
+          switch (token.front()) {
+              case '+':
+                  intermediate_result.emplace(x + y);
+                  break;
+              case '-':
+                  intermediate_result.emplace(x - y);
+                  break;
+              case '*':
+                  intermediate_result.emplace(x * y);
+                  break;
+              case '/':
+                  intermediate_result.emplace(x / y);
+                  break;
+          }
+      }
+      else {
+          const int val = std::stoi(token);
+          intermediate_result.emplace(val);
+      }
+  }
+  return intermediate_result.top();
 }
 
 int main(int argc, char* argv[]) {

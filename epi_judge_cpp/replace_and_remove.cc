@@ -9,7 +9,32 @@ using std::vector;
 
 int ReplaceAndRemove(int size, char s[]) {
   // TODO - you fill in here.
-  return 0;
+  int a_cnt = 0;
+  int write_idx = 0, last_idx = 0;
+  while(last_idx < size) {
+      if (s[last_idx] == 'b') {
+          ++last_idx;
+          continue;
+      }
+      if (s[last_idx] == 'a') {
+          ++a_cnt;
+      }
+      s[write_idx++] = s[last_idx++];
+  }
+
+  int back_write_idx = write_idx + a_cnt-1, back_idx = write_idx - 1;
+  int ret_cnt = back_write_idx+1;
+  while (back_write_idx >= 0) {
+      if (s[back_idx] == 'a') {
+          s[back_write_idx--] = 'd';
+          s[back_write_idx--] = 'd';
+          --back_idx;
+      }
+      else {
+          s[back_write_idx--] = s[back_idx--];
+      }
+  }
+  return ret_cnt;
 }
 vector<string> ReplaceAndRemoveWrapper(TimedExecutor& executor, int size,
                                        const vector<string>& s) {

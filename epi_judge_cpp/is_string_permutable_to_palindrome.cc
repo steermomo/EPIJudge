@@ -1,10 +1,23 @@
 #include <string>
-
+#include <unordered_map>
 #include "test_framework/generic_test.h"
 using std::string;
 
 bool CanFormPalindrome(const string& s) {
   // TODO - you fill in here.
+  std::unordered_map<char, int> cnt;
+  for (const char& ch: s) {
+      ++cnt[ch];
+  }
+  int odd_cnt = 0;
+  for (const auto& p: cnt) {
+      if (p.second % 2 != 0) {
+          ++odd_cnt;
+      }
+      if (odd_cnt > 1) {
+          return false;
+      }
+  }
   return true;
 }
 

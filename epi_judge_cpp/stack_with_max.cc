@@ -9,20 +9,42 @@ class Stack {
  public:
   bool Empty() const {
     // TODO - you fill in here.
-    return true;
+    return element_with_max_cached_.empty();
   }
   int Max() const {
     // TODO - you fill in here.
-    return 0;
+    if (Empty()) {
+        throw length_error("MAX(): empty stack");
+    }
+    return element_with_max_cached_.top().c_max;
   }
   int Pop() {
     // TODO - you fill in here.
-    return 0;
+    if (Empty()) {
+        throw length_error("Pop(): empty stack");
+    }
+    int pop_elem = element_with_max_cached_.top().element;
+    element_with_max_cached_.pop();
+    return pop_elem;
   }
   void Push(int x) {
     // TODO - you fill in here.
+    int max_val;
+    if (Empty()) {
+        max_val = x;
+    }
+    else {
+        max_val = std::max(element_with_max_cached_.top().c_max, x);
+    }
+    element_with_max_cached_.push(ElementWithMaxCached{x, max_val});
     return;
   }
+private:
+    struct ElementWithMaxCached {
+      int element;
+      int c_max;
+  };
+  std::stack<ElementWithMaxCached> element_with_max_cached_;
 };
 struct StackOp {
   std::string op;

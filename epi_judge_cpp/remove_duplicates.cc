@@ -18,6 +18,23 @@ struct Name {
 };
 void EliminateDuplicate(vector<Name>* names) {
   // TODO - you fill in here.
+  vector<Name>& name_ref = *names;
+  std::sort(name_ref.begin(), name_ref.end());
+  int l_idx = 0, r_idx = 1;
+  while (r_idx < name_ref.size()) {
+      if (name_ref[r_idx].first_name == name_ref[l_idx].first_name) {
+          ++r_idx;
+      } else {
+          name_ref[++l_idx] = name_ref[r_idx++];
+      }
+  }
+  if (l_idx == name_ref.size() - 1) {
+      return;
+  }
+  int residual = name_ref.size() - l_idx - 1;
+  while (residual-- > 0) {
+      name_ref.pop_back();
+  }
   return;
 }
 

@@ -4,7 +4,11 @@
 using std::vector;
 bool CanReachEnd(const vector<int>& max_advance_steps) {
   // TODO - you fill in here.
-  return true;
+  int furthest_so_far = 0, last_idx = max_advance_steps.size() - 1;
+  for (int i = 0; i <= furthest_so_far && i <= last_idx; ++i) {
+      furthest_so_far = std::max(furthest_so_far, max_advance_steps[i] + i);
+  }
+  return furthest_so_far >= last_idx;
 }
 
 int main(int argc, char* argv[]) {

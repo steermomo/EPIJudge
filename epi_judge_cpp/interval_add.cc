@@ -8,11 +8,45 @@ using std::vector;
 struct Interval {
   int left, right;
 };
-
+struct EndPoint {
+    bool operator<(const EndPoint& e) const {
+        return point != e.point ? point < e.point : (isLeft && !e.isLeft);
+    }
+    int point;
+    bool isLeft;
+};
 vector<Interval> AddInterval(const vector<Interval>& disjoint_intervals,
                              Interval new_interval) {
   // TODO - you fill in here.
-  return {};
+  vector<EndPoint> E;
+  for (auto &each: disjoint_intervals) {
+      E.push_back({each.left, true});
+      E.push_back({each.right, false});
+  }
+  E.push_back({new_interval.left, true});
+  E.push_back({new_interval.right, false});
+
+  std::sort(E.begin(), E.end());
+
+  vector<Interval> ret;
+  bool is_new_interval = true;
+  int st = 0, left_cnt = 0;
+  for (auto &each : E) {
+      if (each.isLeft) {
+          ++left_cnt;
+          if (is_new_interval) {
+              st = each.point;
+              is_new_interval = false;
+          }
+      } else {
+          --left_cnt;
+      }
+      if (left_cnt == 0) {
+          ret.push_back({st, each.point});
+          is_new_interval = true;
+      }
+  }
+  return ret;
 }
 namespace test_framework {
 template <>

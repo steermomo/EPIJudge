@@ -16,6 +16,15 @@ class Team {
   // Checks if team0 can be placed in front of team1.
   static bool ValidPlacementExists(const Team& team0, const Team& team1) {
     // TODO - you fill in here.
+    auto team0_sort(team0.players_);
+    auto team1_sort(team1.players_);
+    std::sort(team0_sort.begin(), team0_sort.end());
+    std::sort(team1_sort.begin(), team1_sort.end());
+    for (int i = 0; i < team0_sort.size(); ++i) {
+        if (!(team0_sort[i] < team1_sort[i])) {
+            return false;
+        }
+    }
     return true;
   }
 

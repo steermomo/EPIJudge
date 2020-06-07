@@ -4,7 +4,19 @@
 using std::vector;
 vector<int> NextPermutation(vector<int> perm) {
   // TODO - you fill in here.
-  return {};
+  int k = perm.size() - 2;
+  while (k >= 0 && perm[k] >= perm[k+1]) {
+      --k;
+  }
+  if (k == -1) {
+      return {};
+  }
+  std::swap(
+          *std::find_if(perm.rbegin(), perm.rend(), [&](int a) {return a > perm[k];}),
+          perm[k]
+          );
+  std::reverse(perm.begin()+k+1, perm.end());
+  return perm;
 }
 
 int main(int argc, char* argv[]) {

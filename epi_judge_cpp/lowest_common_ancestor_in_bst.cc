@@ -1,5 +1,5 @@
 #include <memory>
-
+#include <set>
 #include "bst_node.h"
 #include "test_framework/binary_tree_utils.h"
 #include "test_framework/generic_test.h"
@@ -13,6 +13,21 @@ BstNode<int>* FindLca(const unique_ptr<BstNode<int>>& tree,
                       const unique_ptr<BstNode<int>>& s,
                       const unique_ptr<BstNode<int>>& b) {
   // TODO - you fill in here.
+  std::unordered_set<BstNode<int>*> set;
+  BstNode<int> *p = tree.get();
+  int s_val = s->data, b_val = b->data;
+  while(p != nullptr) {
+      int c_val = p->data;
+      if (s_val < c_val && b_val < c_val) {
+          // go left
+          p = p->left.get();
+      } else if (s_val > c_val && b_val > c_val) {
+          // go right
+          p = p->right.get();
+      } else {
+          return p;
+      }
+  }
   return nullptr;
 }
 int LcaWrapper(TimedExecutor& executor,

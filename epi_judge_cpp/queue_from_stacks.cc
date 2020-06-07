@@ -10,12 +10,33 @@ class Queue {
  public:
   void Enqueue(int x) {
     // TODO - you fill in here.
+    stk.emplace(x);
     return;
   }
   int Dequeue() {
-    // TODO - you fill in here.
-    return 0;
+      // TODO - you fill in here.
+      if (stk.empty()) {
+          throw length_error("Empty Dequeue");
+      }
+      int v;
+      while (!stk.empty()) {
+          v = stk.top();
+          aux_stk.emplace(v);
+          stk.pop();
+      }
+      // 取队首元素
+      int ret_val = aux_stk.top();
+      aux_stk.pop();
+      while (!aux_stk.empty()) {
+          v = aux_stk.top();
+          aux_stk.pop();
+          stk.emplace(v);
+      }
+      return ret_val;
   }
+
+private:
+    std::stack<int> stk, aux_stk;
 };
 struct QueueOp {
   enum class Operation { kConstruct, kDequeue, kEnqueue } op;

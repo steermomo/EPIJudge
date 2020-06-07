@@ -11,7 +11,30 @@ using std::shared_ptr;
 shared_ptr<ListNode<int>> ListPivoting(const shared_ptr<ListNode<int>>& l,
                                        int x) {
   // TODO - you fill in here.
-  return nullptr;
+  auto less_head = make_shared<ListNode<int>>(ListNode<int>{0, nullptr});
+  auto greater_head = make_shared<ListNode<int>>(ListNode<int>{0, nullptr});
+  auto eq_head = make_shared<ListNode<int>>(ListNode<int>{0, nullptr});
+  auto l_iter = less_head, g_iter = greater_head, eq_iter = eq_head, iter = l;
+  while (iter) {
+      if (iter->data < x) {
+          l_iter->next = iter;
+          l_iter = l_iter->next;
+      }
+      else if (iter->data == x) {
+          eq_iter->next = iter;
+          eq_iter = eq_iter->next;
+      }
+      else {
+          g_iter->next = iter;
+          g_iter = g_iter->next;
+      }
+      iter = iter->next;
+  }
+
+  l_iter->next = eq_head->next == nullptr ? greater_head->next : eq_head->next; // 相等的元素不一定存在
+  eq_iter->next = greater_head->next;
+  g_iter->next = nullptr;
+  return less_head->next;
 }
 std::vector<int> ListToVector(const shared_ptr<ListNode<int>>& l) {
   std::vector<int> v;

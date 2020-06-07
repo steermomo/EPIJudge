@@ -8,7 +8,20 @@ using std::shared_ptr;
 shared_ptr<ListNode<int>> RemoveKthLast(const shared_ptr<ListNode<int>>& L,
                                         int k) {
   // TODO - you fill in here.
-  return nullptr;
+  // 头结点为了方便处理删除
+  auto dummy_head = make_shared<ListNode<int>>(0, L);
+  // 双指针
+  auto fast = L, slow = dummy_head;
+  // 将fast与slow的间距设为k+1 (slow指向前结点，所以多了1)
+  while (k--) {
+      fast = fast->next;
+  }
+  while (fast) {
+      fast = fast->next;
+      slow = slow->next;
+  }
+  slow->next = slow->next->next;
+  return dummy_head->next;
 }
 
 int main(int argc, char* argv[]) {

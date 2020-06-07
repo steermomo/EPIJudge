@@ -2,6 +2,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "test_framework/generic_test.h"
 #include "test_framework/serialization_traits.h"
@@ -16,7 +17,35 @@ struct Person {
 };
 
 void GroupByAge(vector<Person>* people) {
-  // TODO - you fill in here.
+  // TODO - you fill in here
+  vector<Person>& p_ref = *people;
+  std::unordered_map<int, int> age_to_cnt;
+  for (auto &each: p_ref) {
+      ++age_to_cnt[each.age];
+  }
+  std::unordered_map<int, int> age_to_offset;
+  int offset = 0;
+  for (auto &each : age_to_cnt) {
+      age_to_offset[each.first] = offset;
+      offset += each.second;
+  }
+
+  int c_idx = 0;
+  while (!age_to_offset.empty()) {
+      // 将from 的元素替换到to
+      auto from = age_to_offset.begin();
+      // 找到from处年龄对应的offset位置的元素的年龄
+      auto to = age_to_offset.find(p_ref[from->second].age);
+      // 上一步找到两个年龄的offset, 将from替换到to， 此时to位置的元素处于正确的位置， 而from未必
+      std::swap(p_ref[from->second], p_ref[to->second]);
+
+      --age_to_cnt[to->first];
+      if (age_to_cnt[to->first] > 0) {
+          ++age_to_offset[to->first];
+      } else {
+          age_to_offset.erase(to->first);
+      }
+  }
   return;
 }
 

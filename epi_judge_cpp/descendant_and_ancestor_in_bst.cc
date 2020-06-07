@@ -6,12 +6,41 @@
 #include "test_framework/timed_executor.h"
 using std::unique_ptr;
 
+bool IsAncAndDes(std::vector<BstNode<int>*> &lookup) {
+    // 从head 到 tail遍历一次
+    auto head = lookup.front(), tail = lookup.back();
+    int c_idx = 0;
+    while (head != nullptr && head->data != tail->data) {
+        if (head->data == lookup[c_idx]->data) {
+            ++c_idx;
+        }
+        if (head->data > tail->data) {
+            head = head->left.get();
+        } else {
+            head = head->right.get();
+        }
+    }
+    if (head == nullptr || c_idx < 2) {
+        return false;
+    }
+    return true;
+}
 bool PairIncludesAncestorAndDescendantOfM(
     const unique_ptr<BstNode<int>>& possible_anc_or_desc_0,
     const unique_ptr<BstNode<int>>& possible_anc_or_desc_1,
     const unique_ptr<BstNode<int>>& middle) {
   // TODO - you fill in here.
-  return true;
+  std::vector<BstNode<int>*> lookup = {possible_anc_or_desc_0.get(), middle.get(), possible_anc_or_desc_1.get()};
+  bool s_order_ret = IsAncAndDes(lookup);
+  if (s_order_ret) {
+      return true;
+  }
+  std::reverse(std::begin(lookup), std::end(lookup));
+  bool reverse_order_ret = IsAncAndDes(lookup);
+  if (reverse_order_ret) {
+      return true;
+  }
+  return false;
 }
 bool PairIncludesAncestorAndDescendantOfMWrapper(
     TimedExecutor& executor, const unique_ptr<BstNode<int>>& tree,

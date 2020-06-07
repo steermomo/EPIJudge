@@ -5,7 +5,17 @@ using std::string;
 
 string SnakeString(const string& s) {
   // TODO - you fill in here.
-  return "";
+  string ret;
+  for (int i = 1; i < s.size(); i+=4) {
+      ret.push_back(s[i]);
+  }
+  for (int i = 0; i < s.size(); i+=2) {
+      ret.push_back(s[i]);
+  }
+  for (int i = 3; i < s.size(); i+=4) {
+      ret.push_back(s[i]);
+  }
+  return ret;
 }
 
 int main(int argc, char* argv[]) {

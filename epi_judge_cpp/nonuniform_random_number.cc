@@ -2,6 +2,7 @@
 #include <functional>
 #include <unordered_map>
 #include <vector>
+#include <random>
 
 #include "test_framework/generic_test.h"
 #include "test_framework/random_sequence_checker.h"
@@ -13,6 +14,15 @@ using std::vector;
 int NonuniformRandomNumberGeneration(const vector<int>& values,
                                      const vector<double>& probabilities) {
   // TODO - you fill in here.
+  std::default_random_engine seed((std::random_device())());
+  double p = std::uniform_real_distribution<double> (0., 1.0)(seed);
+  double con_sum = 0.;
+  for (int i = 0; i < values.size(); ++i) {
+      con_sum += probabilities[i];
+      if (con_sum > p) {
+          return values[i];
+      }
+  }
   return 0;
 }
 bool NonuniformRandomNumberGenerationRunner(

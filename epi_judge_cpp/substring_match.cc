@@ -7,7 +7,32 @@ using std::string;
 // otherwise.
 int RabinKarp(const string &t, const string &s) {
   // TODO - you fill in here.
-  return 0;
+  if (t.size() < s.size()) {
+      return -1;
+  }
+  const int kBase = 26;
+  int t_hash = 0, s_hash = 0;
+  int power_s = 1; // kBase ^|s|
+  for (int i = 0; i < s.size(); ++i) {
+      power_s = i ? power_s * kBase : 1;
+      t_hash = t_hash * kBase + t[i] - '0';
+      s_hash = s_hash * kBase + s[i] - '0';
+  }
+
+  for (int i = s.size(); i < t.size(); ++i) {
+      // 匹配成功
+      if (t_hash == s_hash && t.compare(i - s.size(), s.size(), s) == 0) {
+          return i - s.size();
+      }
+
+      // 滚动更新hash
+      t_hash -= (t[i-s.size()] - '0') * power_s;
+      t_hash = t_hash * kBase + t[i] - '0';
+  }
+    if (t_hash == s_hash && t.compare(t.size() - s.size(), s.size(), s) == 0) {
+        return t.size() - s.size();
+    }
+  return -1;
 }
 
 int main(int argc, char *argv[]) {

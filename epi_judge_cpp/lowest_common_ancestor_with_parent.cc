@@ -7,7 +7,27 @@
 BinaryTreeNode<int>* Lca(const unique_ptr<BinaryTreeNode<int>>& node0,
                          const unique_ptr<BinaryTreeNode<int>>& node1) {
   // TODO - you fill in here.
-  return nullptr;
+  std::vector<BinaryTreeNode<int>*> path0, path1;
+  BinaryTreeNode<int> *p0 = node0.get(), *p1 = node1.get();
+  // 查找node0的路径
+  while (p0) {
+      path0.push_back(p0);
+      p0 = p0->parent;
+  }
+  // 查找node1的路径
+  while (p1) {
+      path1.push_back(p1);
+      p1 = p1->parent;
+  }
+  // 对齐根结点
+  int idx0 = path0.size() - 1, idx1 = path1.size() - 1;
+  while(idx0 >= 0 && idx1 >= 0) {
+      if (path0[idx0] != path1[idx1]) {
+          break;
+      }
+      --idx0, --idx1;
+  }
+  return path0[idx0+1];
 }
 int LcaWrapper(TimedExecutor& executor,
                const unique_ptr<BinaryTreeNode<int>>& tree, int key0,

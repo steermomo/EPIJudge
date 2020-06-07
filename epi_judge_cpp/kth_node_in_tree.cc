@@ -19,6 +19,25 @@ struct BinaryTreeNode {
 const BinaryTreeNode<int>* FindKthNodeBinaryTree(
     const unique_ptr<BinaryTreeNode<int>>& tree, int k) {
   // TODO - you fill in here.
+    std::stack<BinaryTreeNode<int>*> stk;
+    auto curr = tree.get();
+    int c_th = 0;
+    while (!stk.empty() || curr) {
+        if (curr) {
+            stk.push(curr);
+            curr = curr->left.get();
+        } else {
+            // curr 为空, 上一个结点为叶结点
+            curr = stk.top();
+            stk.pop();
+            ++c_th;
+            if (c_th == k) {
+                return curr;
+            }
+            curr = curr->right.get(); // 向右访问一次
+        }
+    }
+
   return nullptr;
 }
 namespace test_framework {

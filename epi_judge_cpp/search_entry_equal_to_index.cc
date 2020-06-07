@@ -7,7 +7,19 @@ using std::vector;
 
 int SearchEntryEqualToItsIndex(const vector<int>& A) {
   // TODO - you fill in here.
-  return 0;
+  int L = 0, U = A.size() - 1;
+  while (L <= U) {
+      int M = L + (U - L) / 2;
+      if (A[M] == M) {
+          return M;
+      } else if (A[M] > M) {
+          // 值大于index 向左查找
+          U = M - 1;
+      } else {
+          L = M + 1;
+      }
+  }
+  return -1;
 }
 void SearchEntryEqualToItsIndexWrapper(TimedExecutor& executor,
                                        const vector<int>& A) {

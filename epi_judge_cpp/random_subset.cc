@@ -3,7 +3,7 @@
 #include <iterator>
 #include <numeric>
 #include <vector>
-
+#include <random>
 #include "test_framework/generic_test.h"
 #include "test_framework/random_sequence_checker.h"
 #include "test_framework/timed_executor.h"
@@ -13,7 +13,33 @@ using std::vector;
 // Returns a random k-sized subset of {0, 1, ..., n - 1}.
 vector<int> RandomSubset(int n, int k) {
   // TODO - you fill in here.
-  return {};
+    std::default_random_engine seed((std::random_device())());
+    std::unordered_map<int, int> changed_elements;
+    for (int i = 0; i < k; ++i) {
+        int rand_idx = std::uniform_int_distribution<int>(i, n - 1)(seed);
+        auto ptr1 = changed_elements.find(i), ptr2 = changed_elements.find(rand_idx);
+
+        if (ptr1 == changed_elements.end() && ptr2 == changed_elements.end()) {
+            changed_elements[i] = rand_idx;
+            changed_elements[rand_idx] = i;
+        }
+        else if (ptr1 == changed_elements.end() && ptr2 != changed_elements.end()) {
+            changed_elements[i] = ptr2->second;
+            ptr2->second = i;
+        }
+        else if (ptr1 != changed_elements.end() && ptr2 == changed_elements.end()) {
+            changed_elements[rand_idx] = ptr1->second;
+            ptr1->second = rand_idx;
+        }
+        else {
+            std::swap(ptr1->second, ptr2->second);
+        }
+    }
+    vector<int> ret;
+    for (int i = 0; i < k; ++i) {
+        ret.push_back(changed_elements[i]);
+    }
+    return ret;
 }
 bool RandomSubsetRunner(TimedExecutor& executor, int n, int k) {
   using namespace test_framework;

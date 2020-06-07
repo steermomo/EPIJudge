@@ -1,4 +1,5 @@
 #include <string>
+#include <unordered_map>
 
 #include "test_framework/generic_test.h"
 using std::string;
@@ -6,7 +7,24 @@ using std::string;
 bool IsLetterConstructibleFromMagazine(const string& letter_text,
                                        const string& magazine_text) {
   // TODO - you fill in here.
-  return true;
+  std::unordered_map<char, int> cnt;
+  for (const char& ch: letter_text) {
+      ++cnt[ch];
+  }
+  for (const char& ch: magazine_text) {
+      auto iter = cnt.find(ch);
+      if (iter != cnt.end()) {
+          --iter->second;
+          if (iter->second == 0) {
+              cnt.erase(iter);
+              if (cnt.empty()) {
+                  break;
+              }
+          }
+
+      }
+  }
+  return cnt.empty();
 }
 
 int main(int argc, char* argv[]) {

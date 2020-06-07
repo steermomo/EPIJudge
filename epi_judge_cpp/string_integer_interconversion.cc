@@ -6,11 +6,11 @@ using std::string;
 
 string IntToString(int x) {
   // TODO - you fill in here.
-  return "0";
+  return std::to_string(x);
 }
 int StringToInt(const string& s) {
   // TODO - you fill in here.
-  return 0;
+  return std::stoi(s);
 }
 void Wrapper(int x, const string& s) {
   if (stoi(IntToString(x)) != x) {

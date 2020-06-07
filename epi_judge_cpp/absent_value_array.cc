@@ -9,6 +9,7 @@ using std::vector;
 int FindMissingElement(vector<int>::const_iterator stream_begin,
                        const vector<int>::const_iterator& stream_end) {
   // TODO - you fill in here.
+    
   return 0;
 }
 void FindMissingElementWrapper(const vector<int>& stream) {

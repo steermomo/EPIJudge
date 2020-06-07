@@ -20,8 +20,25 @@ struct Star {
 vector<Star> FindClosestKStars(vector<Star>::const_iterator stars_begin,
                                const vector<Star>::const_iterator& stars_end,
                                int k) {
-  // TODO - you fill in here.
-  return {};
+    // TODO - you fill in here.
+    std::priority_queue<Star, vector<Star>, std::less<>> max_heap;
+    int cnt = 0;
+    while (stars_begin != stars_end && cnt < k) {
+        ++cnt;
+        max_heap.emplace(*stars_begin);
+        ++stars_begin;
+    }
+    while (stars_begin != stars_end) {
+        max_heap.emplace(*stars_begin);
+        max_heap.pop(); // pop 最大元素
+        ++stars_begin;
+    }
+    vector<Star> ret;
+    while (!max_heap.empty()) {
+        ret.emplace_back(max_heap.top());
+        max_heap.pop();
+    }
+  return ret;
 }
 
 namespace test_framework {

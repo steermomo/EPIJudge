@@ -8,10 +8,25 @@
 using std::unique_ptr;
 using std::vector;
 
+void CreateListOfLeavesHelper(const unique_ptr<BinaryTreeNode<int>>& tree,
+                              vector<const unique_ptr<BinaryTreeNode<int>>*> &ret){
+    if (!tree.get()) {
+        return;
+    }
+    if (!tree->left.get() && !tree->right.get()) {
+        ret.push_back(&tree);
+        return;
+    }
+    CreateListOfLeavesHelper(tree->left, ret);
+    CreateListOfLeavesHelper(tree->right, ret);
+}
+
 vector<const unique_ptr<BinaryTreeNode<int>>*> CreateListOfLeaves(
     const unique_ptr<BinaryTreeNode<int>>& tree) {
   // TODO - you fill in here.
-  return {};
+    vector<const unique_ptr<BinaryTreeNode<int>>*> ret;
+    CreateListOfLeavesHelper(tree, ret);
+    return ret;
 }
 vector<int> CreateListOfLeavesWrapper(
     TimedExecutor& executor, const unique_ptr<BinaryTreeNode<int>>& tree) {

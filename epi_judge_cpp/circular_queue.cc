@@ -3,19 +3,50 @@
 #include "test_framework/test_failure.h"
 class Queue {
  public:
-  Queue(size_t capacity) {}
+  Queue(size_t capacity) {
+      data = new std::vector<int>(capacity);
+      head = 0, tail = 0;
+      cap = capacity;
+  }
+  void _Resize() {
+      int new_cap = data->size() * 2 + 1;
+      auto new_field = new std::vector<int>(new_cap);
+      int n_idx = 0;
+      while(head != tail) {
+          (*new_field)[n_idx++] = (*data)[head];
+          head = (head + 1) % cap;
+      }
+      head = 0;
+      tail = n_idx;
+      delete data;
+      data = new_field;
+      cap = new_cap;
+  }
   void Enqueue(int x) {
     // TODO - you fill in here.
+    if ((tail + 1) % cap == head) {
+        _Resize();
+    }
+    (*data)[tail] = x;
+    tail = (tail + 1) % cap;
     return;
   }
   int Dequeue() {
     // TODO - you fill in here.
-    return 0;
+    int c_val = (*data)[head];
+    head = (head + 1) % cap;
+    return c_val;
   }
   int Size() const {
     // TODO - you fill in here.
+    return (tail + cap - head) % cap;
     return 0;
   }
+
+private:
+    std::vector<int>* data;
+    int head, tail;
+    int cap;
 };
 struct QueueOp {
   enum class Operation { kConstruct, kDequeue, kEnqueue, kSize } op;

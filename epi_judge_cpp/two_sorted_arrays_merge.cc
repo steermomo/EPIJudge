@@ -5,6 +5,17 @@ using std::vector;
 
 void MergeTwoSortedArrays(vector<int>& A, int m, const vector<int>& B, int n) {
   // TODO - you fill in here.
+  int A_curr = m + n - 1, A_st = m - 1, B_st = n - 1;
+  while (A_st >= 0 && B_st >= 0) {
+      if (A[A_st] >= B[B_st]) {
+          A[A_curr--] = A[A_st--];
+      } else {
+          A[A_curr--] = B[B_st--];
+      }
+  }
+  while (B_st >= 0) {
+      A[A_curr--] = B[B_st--];
+  }
   return;
 }
 vector<int> MergeTwoSortedArraysWrapper(vector<int> A, int m,

@@ -2,7 +2,17 @@
 
 int SquareRoot(int k) {
   // TODO - you fill in here.
-  return 0;
+  int L = 1, U = k;
+  while (L <= U) {
+      long M = L + (U - L) / 2;
+      long prod = M * M;
+      if (prod > k) {
+          U = M - 1;
+      } else if (prod <= k) { // 要求计算<=k的值
+          L = M + 1;
+      }
+  }
+  return L - 1;
 }
 
 int main(int argc, char* argv[]) {
